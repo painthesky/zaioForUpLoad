@@ -71,7 +71,6 @@ class ScrollableCanvasWithButton:
         )
     """)
         self.cnx_GDAX.close()
-        self.root.destroy()
 
 
     def on_configure(self, event):
