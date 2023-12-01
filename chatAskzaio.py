@@ -44,8 +44,8 @@ def submit():
 
     # input_text_alter = content + "\""+input_text+"\"\n" + "进行非常简要的回答"
     input_text_alter = "\""+input_text+"\"\n"+ content
-    for message in messages:
-        input_text_alter = input_text_alter+"\n"+str(message[0])
+    # for message in messages:
+    #     input_text_alter = input_text_alter+"\n"+str(message[0])
     # 从输入框获取文本
 
     msg_to_LLM = [
@@ -58,6 +58,7 @@ def submit():
         messages=msg_to_LLM
     )
     thought01 = completion.choices[0].message.content
+
     with conn.cursor() as cursor:
 
         cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("用户", input_text))
@@ -70,7 +71,7 @@ def submit():
     elif thought01 == "b":
         output = "可以窗口缴费，也可以机器缴费。推荐机器缴费，你觉得可以么？"
     elif thought01 == "c":
-        output = "可以窗口缴费，也可以机器缴费。推荐机器缴费，你觉得可以么？"
+        output = "可以窗口挂号，也可以机器挂号。推荐机器挂号，你觉得可以么？"
     elif thought01 == "d":
         output = "取药窗口在一楼大厅西侧，取药窗口有很多，你知道自己应该在几号窗口取药么？"
     elif thought01 == "e":
@@ -171,28 +172,30 @@ def take_user_data(input_text):
 def ask_gpt_directly(input_text):
 
     with conn.cursor() as cursor:
-        cursor.execute("SELECT message "
-                       "FROM chat_table "
-                       "WHERE sender = ('用户', '在哦')"
-                       "ORDER BY id DESC "
-                       "LIMIT 30")
+        cursor.execute("select * from chat_table WHERE sender IN ('用户', '在哦') ORDER BY id DESC LIMIT 30")
         messages = cursor.fetchall()
 
+    input_text_alter = "\""+input_text+"\""
+
     # input_text_alter = content + "\""+input_text+"\"\n" + "进行非常简要的回答"
-    input_text_alter = "结合以上聊天记录回答：\""+input_text+"\"\n"
-    for message in messages:
-        input_text_alter = message[0]+"\n"+input_text_alter
 
-    with conn.cursor() as cursor:
+    # input_text_alter = "结合以上聊天记录回答：\"" + input_text + "\"\n"
+    # for message in messages:
+    #     input_text_alter = message[1] + ": " + message[2] + "\n" + input_text_alter
+    msg_to_LLM = [
+            {"role": "system", "content": "你的名字叫在哦。你是一个可以犯错的答题者，大多数情况下你喜欢简要的回答问题。你不说不知道，不知道的时候也要猜一个答案。"},
 
-        cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("在哦的想法", input_text_alter))
+        ]
+    for message in reversed(messages):
+        if message[1] == "用户":
+            msg_to_LLM.append({"role": "user", "content": message[2]})
+        if message[1] == "在哦":
+            msg_to_LLM.append({"role": "assistant", "content": message[2]})
+    msg_to_LLM.append({"role": "user", "content": input_text_alter})
 
     conn.commit()
     # 从输入框获取文本
-    msg_to_LLM = [
-            {"role": "system", "content": "你的名字叫在哦。你是一个可以犯错的答题者，大多数情况下你喜欢简要的回答问题。你不说不知道，不知道的时候也要猜一个答案。"},
-            {"role": "user", "content": input_text_alter}
-        ]
+
 
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
