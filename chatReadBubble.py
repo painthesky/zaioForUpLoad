@@ -5,8 +5,8 @@ import mysql.connector
 class ScrollableCanvasWithButton:
     def __init__(self, root):
         self.root = root
-        self.root.title("Chat Application")
-        root.iconbitmap('D:\gui\生活递归_透明.ico')
+        self.root.title("聊天历史")
+        root.iconbitmap('./生活递归_透明.ico')
         root.geometry("430x700")
 
         # 创建Canvas组件
