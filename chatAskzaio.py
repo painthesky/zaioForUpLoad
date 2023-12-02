@@ -53,8 +53,8 @@ def submit():
             {"role": "user", "content": input_text_alter}
         ]
     completion = client.chat.completions.create(
-        # model="gpt-3.5-turbo",
-        model="gpt-4",
+        model="gpt-3.5-turbo",
+        # model="gpt-4",
         messages=msg_to_LLM
     )
     thought01 = completion.choices[0].message.content
