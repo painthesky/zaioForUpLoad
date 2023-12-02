@@ -242,7 +242,7 @@ def ask_gpt_directly(input_text):
 
 # 创建Tkinter窗口
 root = tk.Tk()
-root.title("询问openai")
+root.title("询问在哦")
 root.iconbitmap('./生活递归_透明.ico')
 root.geometry("600x700")
 
