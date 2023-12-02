@@ -34,13 +34,14 @@ def submit():
         # 读取整个文件内容
         content = file.read()
         # Get RDS connection
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT message "
-                       "FROM chat_table "
-                       "WHERE sender = '用户'"
-                       "ORDER BY id DESC "
-                       "LIMIT 10")
-        messages = cursor.fetchall()
+
+    # with conn.cursor() as cursor:
+    #     cursor.execute("SELECT message "
+    #                    "FROM chat_table "
+    #                    "WHERE sender = '用户'"
+    #                    "ORDER BY id DESC "
+    #                    "LIMIT 10")
+    #     messages = cursor.fetchall()
 
     # input_text_alter = content + "\""+input_text+"\"\n" + "进行非常简要的回答"
     input_text_alter = "\""+input_text+"\"\n"+ content
