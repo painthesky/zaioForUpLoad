@@ -62,41 +62,69 @@ def submit():
     with conn.cursor() as cursor:
 
         cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("用户", input_text))
-        cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("在哦的想法", thought01))
 
+        if thought01 == "h":
+            output = "小卖部在一楼的北面，咖啡厅在二楼的北面，你现在在哪里"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我想吃东西or我想喝东西，代号h"))
+        elif thought01 == "b":
+            output = "可以窗口缴费，也可以机器缴费。推荐机器缴费，你觉得可以么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我想缴费，代号b"))
+        elif thought01 == "c":
+            output = "可以窗口挂号，也可以机器挂号。推荐机器挂号，你觉得可以么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我想挂号，代号c"))
+        elif thought01 == "d":
+            output = "取药窗口在一楼大厅西侧，取药窗口有很多，你知道自己应该在几号窗口取药么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我想取药，代号d"))
+        elif thought01 == "e":
+            output = "就医需要先挂号，您已经有挂号条了对么？\n您需要我调用数据,猜猜您的病情该如何治疗么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我询问了症状，代号e"))
+        elif thought01 == "f":
+            output = "请您立刻像周围的人请求救助，我已经把你的资料上传系统，请您稍作等待"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我的情况紧急有生命危险，代号f"))
+        elif thought01 == "g":
+            output = "一楼二楼三楼都有厕所，您现在在哪？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我想上厕所，代号g"))
+        elif thought01 == "i":
+            output = "现在医生是要您去取药还是做检查呢？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我刚做完了问诊，代号i"))
+        elif thought01 == "j":
+            output = "您接下来应该看医生吧？\n您知道自己去哪个科室么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我刚做完了挂号，代号j"))
+        elif thought01 == "k":
+            output = "您缴费的项目是什么？\n挂号，还是检查，还是药费？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我刚做完了缴费，代号k"))
+        elif thought01 == "l":
+            output = "您知道药应该怎么吃吧？\n您知道离开医院回家的路吧？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我刚做完了取药，代号l"))
+        elif thought01 == "m":
+            output = "结果出来了么？\n如果出来了，那就等于您的病历更新了。你需要找医生再问诊一遍吧？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我刚做完了检查，代号m"))
+        elif thought01 == "n":
+            output = "如果您在等待，我们可以完善一下最新的病历，您想么？"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "我在排队or我在病房门口，代号n"))
+            take_user_data(input_text)
+        elif thought01 == "a":
+            output = ask_gpt_directly(input_text)
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "以上都不是，代号a"))
+        else:
+            output = ask_gpt_directly(input_text)
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                           ("在哦的想法", "识别器没有识别，没有返回正确代号"))
     conn.commit()
-
-    if thought01 == "h":
-        output = "小卖部在一楼的北面，咖啡厅在二楼的北面，你现在在哪里"
-    elif thought01 == "b":
-        output = "可以窗口缴费，也可以机器缴费。推荐机器缴费，你觉得可以么？"
-    elif thought01 == "c":
-        output = "可以窗口挂号，也可以机器挂号。推荐机器挂号，你觉得可以么？"
-    elif thought01 == "d":
-        output = "取药窗口在一楼大厅西侧，取药窗口有很多，你知道自己应该在几号窗口取药么？"
-    elif thought01 == "e":
-        output = "就医需要先挂号，您已经有挂号条了对么？\n您需要我调用数据,猜猜您的病情该如何治疗么？"
-    elif thought01 == "f":
-        output = "请您立刻像周围的人请求救助，我已经把你的资料上传系统，请您稍作等待"
-    elif thought01 == "g":
-        output = "一楼二楼三楼都有厕所，您现在在哪？"
-    elif thought01 == "i":
-        output = "现在医生是要您去取药还是做检查呢？"
-    elif thought01 == "j":
-        output = "您接下来应该看医生吧？\n您知道自己去哪个科室么？"
-    elif thought01 == "k":
-        output = "您缴费的项目是什么？\n挂号，还是检查，还是药费？"
-    elif thought01 == "l":
-        output = "您知道药应该怎么吃吧？\n您知道离开医院回家的路吧？"
-    elif thought01 == "m":
-        output = "结果出来了么？\n如果出来了，那就等于您的病历更新了。你需要找医生再问诊一遍吧？"
-    elif thought01 == "n":
-        output = "如果您在等待，我们可以完善一下最新的病历，您想么？"
-        take_user_data(input_text)
-    elif thought01 == "a":
-        output = ask_gpt_directly(input_text)
-    else:
-        output = ask_gpt_directly(input_text)
 
     # 在标签中显示提交的内容
     label.config(text="你刚刚提交的内容是: " + input_text_alter)
@@ -133,24 +161,30 @@ def submit_case02():
         messages=msg_to_LLM2
     )
     thought01 = completion.choices[0].message.content
+
     with conn.cursor() as cursor:
-
         cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("用户", input_text))
-        cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)", ("在哦的想法", thought01))
 
+        if thought01 == "b":
+            output = "那我们现在开始填病历。"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                                ("在哦的想法", "我说了是的，想要，肯定的意思，代号b"))
+        elif thought01 == "c":
+            output = "好的知道了"
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                                ("在哦的想法", "我说了不是，不想要，否定的意思，代号c"))
+            submit_button.config(command=submit)
+        elif thought01 == "a":
+            output = ask_gpt_directly(input_text)
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                                ("在哦的想法", "以上都不是，代号a"))
+            submit_button.config(command=submit)
+        else:
+            output = ask_gpt_directly(input_text)
+            cursor.execute("INSERT INTO chat_table (sender, message) VALUES (%s, %s)",
+                                ("在哦的想法", "识别器没有识别，没有返回正确代号"))
+            submit_button.config(command=submit)
     conn.commit()
-
-    if thought01 == "b":
-        output = "那我们现在开始填病历。"
-    elif thought01 == "c":
-        output = "好的知道了"
-        submit_button.config(command=submit)
-    elif thought01 == "a":
-        output = ask_gpt_directly(input_text)
-        submit_button.config(command=submit)
-    else:
-        output = ask_gpt_directly(input_text)
-        submit_button.config(command=submit)
 
     # 在标签中显示提交的内容
     label.config(text="你刚刚提交的内容是: " + input_text_alter2)
