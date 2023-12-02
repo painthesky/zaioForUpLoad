@@ -19,7 +19,7 @@ with conn.cursor() as cursor:
         CREATE TABLE IF NOT EXISTS chat_table (
             id INT AUTO_INCREMENT PRIMARY KEY,
             sender VARCHAR(20),
-            message VARCHAR(6000)
+            message VARCHAR(500)
         )
     """)
 conn.commit()
@@ -50,7 +50,7 @@ def submit():
     # 从输入框获取文本
 
     msg_to_LLM = [
-            {"role": "system", "content": "你是一个语义判断机器，你只用单个英文字母或者单个数字提交你的判断,比如\"a\",\"b\"，当你不知道的时候回复\"n\""},
+            {"role": "system", "content": "你是一个语义判断机器，你只用单个英文字母或者单个数字提交你的判断,比如\"a\",\"b\"，当你不知道的时候回复\"a\""},
             {"role": "user", "content": input_text_alter}
         ]
     completion = client.chat.completions.create(
@@ -152,7 +152,7 @@ def submit_case02():
     # 从输入框获取文本
 
     msg_to_LLM2 = [
-            {"role": "system", "content": "你是一个语义判断机器，你只用单个英文字母或者单个数字提交你的判断,比如\"a\",\"b\"，当你不知道的时候回复\"n\""},
+            {"role": "system", "content": "你是一个语义判断机器，你只用单个英文字母或者单个数字提交你的判断,比如\"a\",\"b\"，当你不知道的时候回复\"a\""},
             {"role": "user", "content": input_text_alter2}
         ]
 
